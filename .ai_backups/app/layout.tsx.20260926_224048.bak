@@ -1,0 +1,81 @@
+import type { Metadata } from 'next';
+import { Inter, Cairo } from 'next/font/google';
+import './globals.css';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+
+const cairo = Cairo({
+  subsets: ['arabic', 'latin'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+  variable: '--font-cairo',
+  display: 'swap',
+});
+
+export const metadata: Metadata = {
+  title: 'SaveYahoo — High-Speed Yahoo Video, Audio & Blog Downloader',
+  description: 'Download high-definition 1080p Yahoo Videos, extract studio-quality 320kbps MP3 audio, and save Yahoo blogs and news articles in clean reader formats.',
+  metadataBase: new URL('https://www.saveyahoo.ai.studio'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'SaveYahoo — High-Speed Yahoo Video, Audio & Blog Downloader',
+    description: 'Download high-definition 1080p Yahoo Videos, extract studio-quality 320kbps MP3 audio, and save Yahoo blogs and news articles in clean reader formats.',
+    url: 'https://www.saveyahoo.ai.studio',
+    siteName: 'SaveYahoo',
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SaveYahoo — High-Speed Yahoo Video, Audio & Blog Downloader',
+    description: 'Download high-definition 1080p Yahoo Videos, extract studio-quality 320kbps MP3 audio, and save Yahoo blogs and news articles.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'SaveYahoo',
+    url: 'https://www.saveyahoo.ai.studio',
+    applicationCategory: 'MultimediaApplication',
+    operatingSystem: 'All (iOS, Android, Windows, macOS, Linux)',
+    description: 'High-speed browser utility to save Yahoo Videos in Full HD 1080p, extract 320kbps MP3 audio, and archive Yahoo blogs in clean reader mode.',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+  };
+
+  return (
+    <html lang="en" className="scroll-smooth">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+      <body className="bg-white text-slate-900 antialiased min-h-screen" suppressHydrationWarning>
+        {children}
+      </body>
+    </html>
+  );
+}
+

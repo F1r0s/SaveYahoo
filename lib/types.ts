@@ -1,0 +1,77 @@
+export const APP_CONFIG = {
+  name: 'SaveYahoo',
+  domain: 'saveyahoo.ai.studio',
+  baseUrl: 'https://saveyahoo.ai.studio',
+  tagline: 'High-Speed Yahoo Video, Audio & Blog Downloader',
+  description: 'Download high-definition 1080p Yahoo Videos, extract studio-quality MP3 audio, and save Yahoo news & blogs in distraction-free reader mode.',
+  adminPath: '/secretadmin',
+  itemsPerSitemap: 250, // Clean partition chunks for thousands of pSEO URLs
+};
+
+export type MediaFormatType = 'video' | 'audio' | 'blog';
+
+export interface VideoStreamOption {
+  quality: '1080p' | '720p' | '480p' | '360p';
+  resolution: string;
+  format: 'mp4' | 'webm';
+  filesize: string;
+  bitrate: string;
+  fps: number;
+  hasAudio: boolean;
+  directUrl?: string;
+}
+
+export interface AudioStreamOption {
+  quality: '320kbps' | '192kbps' | '128kbps';
+  format: 'mp3' | 'm4a';
+  filesize: string;
+  sampleRate: string;
+  codec: string;
+  directUrl?: string;
+}
+
+export interface BlogExportOption {
+  format: 'pdf' | 'markdown' | 'html' | 'txt';
+  label: string;
+  description: string;
+  filesize: string;
+  readerOptimized: boolean;
+}
+
+export interface ParsedYahooMedia {
+  id: string;
+  url: string;
+  title: string;
+  description: string;
+  author: string;
+  publishedDate: string;
+  thumbnailUrl: string;
+  category: 'News' | 'Sports' | 'Finance' | 'Tech' | 'Entertainment' | 'Lifestyle' | 'Originals';
+  primaryType: MediaFormatType;
+  duration?: string; // For video/audio e.g. "04:18"
+  readTime?: string; // For articles e.g. "5 min read"
+  previewVideoUrl?: string; // Direct preview stream for in-browser playback
+  previewAudioUrl?: string; // Direct preview audio track for in-browser playback
+  videoStreams: VideoStreamOption[];
+  audioStreams: AudioStreamOption[];
+  blogExports: BlogExportOption[];
+  blogContent?: {
+    paragraphs: string[];
+    headings: string[];
+    summary: string;
+    keyPoints: string[];
+  };
+}
+
+export interface PseoTopic {
+  slug: string;
+  title: string;
+  category: string;
+  subcategory: string;
+  description: string;
+  keywords: string[];
+  searchVolume: string;
+  sampleYahooUrl: string;
+  mediaType: MediaFormatType;
+  updatedAt: string;
+}

@@ -1,0 +1,6 @@
+{
+  "name": "SaveYahoo",
+  "description": "High-speed media and blog downloader for Yahoo. Save Yahoo Videos in HD 1080p, extract MP3 audio, and download Yahoo blogs and news articles in clean reader formats.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

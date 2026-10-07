@@ -1,0 +1,278 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import {
+  Lock,
+  KeyRound,
+  Eye,
+  EyeOff,
+  LogOut,
+  FileCode,
+  Activity,
+  Database,
+  ArrowLeft,
+  CheckCircle,
+  Loader2,
+  Globe,
+} from 'lucide-react';
+import AdminPseoManager from '@/components/admin/AdminPseoManager';
+import AdminLanguageManager from '@/components/admin/AdminLanguageManager';
+import AdminMetrics from '@/components/admin/AdminMetrics';
+import AdminDatabaseConfig from '@/components/admin/AdminDatabaseConfig';
+
+export default function SecretAdminPage() {
+  const [passkey, setPasskey] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'pseo' | 'languages' | 'metrics' | 'database'>('pseo');
+
+  // Verify session on mount
+  useEffect(() => {
+    let isMounted = true;
+    const checkSession = async () => {
+      try {
+        const res = await fetch('/api/admin/auth', {
+          method: 'GET',
+        });
+        const data = await res.json();
+        if (isMounted && data.valid) {
+          setIsAuthenticated(true);
+        }
+      } catch {
+        // Unauthenticated
+      }
+    };
+    checkSession();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!passkey.trim()) return;
+
+    setLoading(true);
+    setErrorMsg(null);
+
+    try {
+      const res = await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passkey: passkey.trim() }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        setIsAuthenticated(true);
+        setPasskey('');
+      } else {
+        setErrorMsg(data.message || 'Authentication rejected');
+      }
+    } catch {
+      setErrorMsg('Network error connecting to auth service');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'logout' }),
+      });
+    } catch {
+      // Ignore
+    }
+    setIsAuthenticated(false);
+    setPasskey('');
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
+      {/* Top Bar */}
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Link
+              href="/"
+              className="text-xs font-semibold text-slate-500 hover:text-slate-900 inline-flex items-center gap-1 transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back to SaveYahoo</span>
+            </Link>
+            <span className="text-slate-300">/</span>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+              <span className="font-bold text-slate-900 text-sm tracking-tight">
+                SaveYahoo Admin Console
+              </span>
+              <span className="text-[10px] font-mono text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">
+                /secretadmin
+              </span>
+            </div>
+          </div>
+
+          {isAuthenticated && (
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Sign Out</span>
+            </button>
+          )}
+        </div>
+      </header>
+
+      {/* Main Container */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {!isAuthenticated ? (
+          /* LOGIN VIEW */
+          <div className="max-w-md mx-auto my-12 bg-white rounded-2xl border border-slate-200 shadow-md p-6 sm:p-8 space-y-6">
+            <div className="text-center space-y-2">
+              <div className="w-12 h-12 rounded-xl bg-purple-50 text-[#6001d2] flex items-center justify-center mx-auto">
+                <Lock className="w-6 h-6" />
+              </div>
+              <h1 className="text-xl font-bold text-slate-900">
+                Administrator Verification
+              </h1>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                This endpoint is protected from search engine crawlers and unauthorized traffic. Enter your administrator passkey below.
+              </p>
+            </div>
+
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Admin Passkey
+                </label>
+                <div className="relative flex items-center">
+                  <KeyRound className="w-4 h-4 text-slate-400 absolute left-3" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={passkey}
+                    onChange={(e) => setPasskey(e.target.value)}
+                    placeholder="Enter admin secret key"
+                    className="w-full pl-9 pr-10 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:border-[#6001d2] focus:ring-2 focus:ring-[#6001d2]/20 font-mono"
+                    autoFocus
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 text-slate-400 hover:text-slate-600 cursor-pointer"
+                    title={showPassword ? 'Hide passkey' : 'Show passkey'}
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              {errorMsg && (
+                <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg text-xs text-rose-700 leading-snug">
+                  {errorMsg}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-2.5 px-4 text-sm font-bold text-white bg-[#6001d2] hover:bg-[#4e00a8] rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+              >
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
+                <span>{loading ? 'Verifying...' : 'Access Dashboard'}</span>
+              </button>
+            </form>
+
+            <div className="pt-4 border-t border-slate-100 text-center">
+              <span className="text-[11px] text-slate-400">
+                Default staging key: <code className="font-mono text-slate-600 bg-slate-100 px-1 py-0.5 rounded">saveyahoo-admin-2026</code>
+              </span>
+            </div>
+          </div>
+        ) : (
+          /* AUTHENTICATED DASHBOARD VIEW */
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+              <div>
+                <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+                  System Administration & Control Center
+                </h1>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  SaveYahoo domain: <span className="font-mono text-[#6001d2]">www.saveyahoo.ai.studio</span> · Modular Architecture Active
+                </p>
+              </div>
+
+              {/* Functional Tab Buttons */}
+              <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-200/80 rounded-lg self-start sm:self-auto">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('pseo')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${
+                    activeTab === 'pseo'
+                      ? 'bg-white text-slate-900 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <FileCode className="w-3.5 h-3.5" />
+                  <span>pSEO Matrix</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('languages')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${
+                    activeTab === 'languages'
+                      ? 'bg-white text-slate-900 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <Globe className="w-3.5 h-3.5" />
+                  <span>Languages (i18n)</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('metrics')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${
+                    activeTab === 'metrics'
+                      ? 'bg-white text-slate-900 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <Activity className="w-3.5 h-3.5" />
+                  <span>Downloader Health</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('database')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${
+                    activeTab === 'database'
+                      ? 'bg-white text-slate-900 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <Database className="w-3.5 h-3.5" />
+                  <span>PostgreSQL</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Active Tab View */}
+            {activeTab === 'pseo' && <AdminPseoManager />}
+            {activeTab === 'languages' && <AdminLanguageManager />}
+            {activeTab === 'metrics' && <AdminMetrics />}
+            {activeTab === 'database' && <AdminDatabaseConfig />}
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}

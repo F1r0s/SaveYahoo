@@ -1,0 +1,138 @@
+import React from 'react';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { ArrowRight, Compass } from 'lucide-react';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import HeroDownloader from '@/components/HeroDownloader';
+import HowItWorks from '@/components/HowItWorks';
+import FeatureGrid from '@/components/FeatureGrid';
+import DeviceGuide from '@/components/DeviceGuide';
+import Troubleshooting from '@/components/Troubleshooting';
+import FaqAccordion from '@/components/FaqAccordion';
+import LegalNotice from '@/components/LegalNotice';
+
+export const metadata: Metadata = {
+  title: 'SaveYahoo — High-Speed Yahoo Video, Audio & Blog Downloader',
+  description: 'Download high-definition 1080p Yahoo Videos, extract studio-quality 320kbps MP3 audio, and save Yahoo blogs and news articles in clean reader formats.',
+  openGraph: {
+    title: 'SaveYahoo — High-Speed Yahoo Video, Audio & Blog Downloader',
+    description: 'Download high-definition 1080p Yahoo Videos, extract studio-quality 320kbps MP3 audio, and save Yahoo blogs and news articles.',
+    type: 'website',
+    url: 'https://www.saveyahoo.ai.studio',
+    siteName: 'SaveYahoo',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SaveYahoo — High-Speed Yahoo Video, Audio & Blog Downloader',
+    description: 'Download high-definition 1080p Yahoo Videos, extract studio-quality 320kbps MP3 audio, and save Yahoo blogs and news articles.',
+  },
+};
+
+export default function HomePage() {
+  return (
+    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-[#6001d2]/15 selection:text-[#6001d2]">
+      {/* Top Navigation */}
+      <Navbar />
+
+      <main className="flex-1">
+        {/* Main Hero Downloader Section */}
+        <HeroDownloader
+          headline="Save Any Yahoo Video, Audio Track or Blog in Seconds"
+          subheadline="Download Yahoo News clips, Finance briefings, Sports highlights, and Lifestyle blogs in Full HD 1080p, crystal-clear 320k MP3 audio, or distraction-free Markdown reader mode."
+        />
+
+        {/* Jump Navigation Bar (Single Line Controls) */}
+        <div className="border-y border-slate-200 bg-slate-50/70 py-3 hidden sm:block">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center gap-6 text-xs font-semibold text-slate-600">
+            <a href="#downloader" className="hover:text-[#6001d2] transition-colors">
+              Downloader Tool
+            </a>
+            <span className="text-slate-300">·</span>
+            <a href="#how-it-works" className="hover:text-[#6001d2] transition-colors">
+              How to Save
+            </a>
+            <span className="text-slate-300">·</span>
+            <a href="#features" className="hover:text-[#6001d2] transition-colors">
+              Features
+            </a>
+            <span className="text-slate-300">·</span>
+            <a href="#devices" className="hover:text-[#6001d2] transition-colors">
+              Devices
+            </a>
+            <span className="text-slate-300">·</span>
+            <a href="#troubleshooting" className="hover:text-[#6001d2] transition-colors">
+              Supported Links
+            </a>
+            <span className="text-slate-300">·</span>
+            <a href="#faq" className="hover:text-[#6001d2] transition-colors">
+              FAQ
+            </a>
+            <span className="text-slate-300">·</span>
+            <Link href="/directory" className="text-[#6001d2] hover:underline font-bold inline-flex items-center gap-1">
+              <Compass className="w-3.5 h-3.5" />
+              <span>pSEO Directory</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* 4-Step Process Section */}
+        <div id="how-it-works">
+          <HowItWorks />
+        </div>
+
+        {/* Bento Grid Feature Capabilities */}
+        <div id="features">
+          <FeatureGrid />
+        </div>
+
+        {/* Cross-Device Compatibility Guide */}
+        <div id="devices">
+          <DeviceGuide />
+        </div>
+
+        {/* Troubleshooting & Supported URLs */}
+        <div id="troubleshooting">
+          <Troubleshooting />
+        </div>
+
+        {/* Directory CTA Banner */}
+        <section className="py-14 bg-gradient-to-r from-purple-900 via-[#6001d2] to-indigo-900 text-white">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+            <span className="text-xs uppercase tracking-widest text-purple-200 font-bold font-mono">
+              Programmatic SEO Architecture
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              Looking for a Specific Yahoo Topic or Video?
+            </h2>
+            <p className="text-sm sm:text-base text-purple-100 max-w-2xl mx-auto leading-relaxed">
+              Explore thousands of programmatic pages covering Yahoo Finance earnings calls, NFL touchdown highlights, White House press conferences, and culinary recipes.
+            </p>
+            <div className="pt-2">
+              <Link
+                href="/directory"
+                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold text-slate-900 bg-white hover:bg-slate-100 rounded-xl shadow-lg transition-all active:scale-95"
+              >
+                <span>Browse Programmatic Directory</span>
+                <ArrowRight className="w-4 h-4 text-[#6001d2]" />
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Frequently Asked Questions */}
+        <div id="faq">
+          <FaqAccordion />
+        </div>
+
+        {/* Legal & Compliance Notice */}
+        <div id="compliance">
+          <LegalNotice />
+        </div>
+      </main>
+
+      {/* Footer */}
+      <Footer />
+    </div>
+  );
+}

@@ -1,11 +1,21 @@
-<div align="center">
+# SaveYahoo
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+High-Speed Yahoo Video, Audio & Blog Downloader built with Next.js 15, Tailwind CSS, Supabase PostgreSQL, and Programmatic SEO (pSEO).
 
-  <h1>Built with AI Studio</h2>
+## Features
+- **Video Downloader**: Save Yahoo News, Finance, and Sports video streams in Full HD 1080p, 720p, and 480p MP4.
+- **Audio Extractor**: Extract high-fidelity 320kbps MP3 audio with normalized sound curves.
+- **Blog & Article Reader**: Archive Yahoo Lifestyle, Tech, and News stories in clean, ad-free Markdown, HTML, and printable PDF.
+- **Programmatic SEO (pSEO)**: Thousands of dynamic topic pages indexed across partitioned sitemaps (`sitemap_1.xml`, `sitemap_2.xml`, etc.).
+- **Multilingual Support**: Supports English, Spanish, French, Arabic (Cairo font + RTL), Pashto, and Assamese.
+- **Supabase PostgreSQL Ready**: Modular database schema for admin authentication, download metrics, and dynamic SEO pages.
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+## Getting Started
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+### Prerequisites
+- Node.js 20+
+- A Supabase project (for PostgreSQL)
 
-</div>
+### 1. Install dependencies
+```bash
+npm install
